@@ -1,0 +1,9 @@
+package com.liedssna.org.java.main.display;
+
+public class Display {
+	
+	public Display(String title) {
+		super(title);
+	}
+
+}

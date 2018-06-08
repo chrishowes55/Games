@@ -1,0 +1,9 @@
+package com.liedssna.org.java.main.display;
+
+public class Display extends JFrame{
+	
+	public Display(String title) {
+		super(title);
+	}
+
+}

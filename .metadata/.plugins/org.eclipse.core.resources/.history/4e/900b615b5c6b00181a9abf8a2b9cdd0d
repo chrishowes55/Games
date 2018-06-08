@@ -1,0 +1,13 @@
+package com.liedssna.org.java.main.display;
+
+import javax.swing.JFrame;
+
+public class Display extends JFrame{
+	
+	public Display(String title) {
+		super(title);
+		setSize(500, 500);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+}

@@ -1,0 +1,11 @@
+package com.liedssna.org.java.main.game;
+
+public class Game {
+	
+	private Display display;
+	
+	public Game() {
+		display = new Display("Picture Cross");
+	}
+
+}
