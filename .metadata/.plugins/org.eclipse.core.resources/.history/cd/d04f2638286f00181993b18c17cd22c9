@@ -53,11 +53,9 @@ public class Game {
 				thisLineUser += " " ;
 			}
 		}
-		String user = thisLineUser.trim();
-		String finalComputer = thisColumn.trim();
-		System.out.println(display.decideRowTitle(finalComputer));
-		System.out.println(display.decideRowTitle(user));
-		if (display.decideRowTitle(finalComputer).equals(display.decideRowTitle(user))) {
+		System.out.println(thisColumn);
+		System.out.println(thisLineUser);
+		if (display.decideRowTitle(thisColumn).equals(display.decideRowTitle(thisLineUser))) {
 			return true;
 		}
 		return false;
@@ -86,9 +84,9 @@ public class Game {
 				thisLineUser += " " ;
 			}
 		}
-		String user = thisLineUser.trim();
-		String finalComputer = thisLine.trim();
-		if (display.decideRowTitle(finalComputer).equals(display.decideRowTitle(user))) {
+		System.out.println(thisLine);
+		System.out.println(thisLineUser);
+		if (display.decideRowTitle(thisLine).equals(display.decideRowTitle(thisLineUser))) {
 			return true;
 		}
 		return false;

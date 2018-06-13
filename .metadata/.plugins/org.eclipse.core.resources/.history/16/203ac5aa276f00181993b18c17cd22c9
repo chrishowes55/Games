@@ -53,17 +53,13 @@ public class Game {
 				thisLineUser += " " ;
 			}
 		}
-		String user = thisLineUser.trim();
-		String finalComputer = thisColumn.trim();
-		System.out.println(display.decideRowTitle(finalComputer));
-		System.out.println(display.decideRowTitle(user));
-		if (display.decideRowTitle(finalComputer).equals(display.decideRowTitle(user))) {
+		if (display.decideRowTitle(thisColumn).equals(display.decideRowTitle(thisLineUser))) {
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean checkRow(int row, int size, int level) {
+	public boolean checkRow(int row, int size, int level, int line) {
 		BufferedReader br;
 		String thisLine = "";
 		String thisLineUser = "";
@@ -71,7 +67,7 @@ public class Game {
 			InputStreamReader reader = new InputStreamReader(new FileInputStream(
 					"/home/chris/PuzzleGames/PictureCross/assets/levelplans/level" + level + ".txt"));
 			br = new BufferedReader(reader);
-			for (int i = 0; i < row; i++) {
+			for (int i = 0; i < line; i++) {
 				br.readLine();
 			}
 			thisLine = br.readLine();
@@ -86,9 +82,7 @@ public class Game {
 				thisLineUser += " " ;
 			}
 		}
-		String user = thisLineUser.trim();
-		String finalComputer = thisLine.trim();
-		if (display.decideRowTitle(finalComputer).equals(display.decideRowTitle(user))) {
+		if (display.decideRowTitle(thisLine).equals(display.decideRowTitle(thisLineUser))) {
 			return true;
 		}
 		return false;

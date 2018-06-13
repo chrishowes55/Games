@@ -261,7 +261,7 @@ public class Display extends JFrame {
 			size = 10;
 		}
 		
-		if (game.checkRow(row, size, currentLevel)) {
+		if (game.checkRow(row, size)) {
 			rowLabels.get(currentLevel - 1).get(row).setBackground(Color.GRAY);
 		}
 	}
