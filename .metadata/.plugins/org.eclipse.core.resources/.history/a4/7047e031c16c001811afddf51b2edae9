@@ -1,0 +1,364 @@
+package com.liedssna.org.java.main.display;
+
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import com.liedssna.org.java.main.game.Game;
+
+public class Display extends JFrame {
+
+	private JPanel normalPane;
+	private JDialog complete;
+	private Game game;
+	private ArrayList<JButton> buttons = new ArrayList<JButton>();
+	private ArrayList<JPanel> panes = new ArrayList<JPanel>();
+	private ArrayList<ArrayList<Space>> spaces = new ArrayList<ArrayList<Space>>();
+	private int currentLevel = 0;
+
+	public Display(String title, Game game) {
+		super(title);
+		setSize(1000, 1000);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		this.game = game;
+
+		popSpaces();
+
+		createPanels();
+		setContentPane(normalPane);
+	}
+
+	private void popSpaces() {
+		spaces.add(new ArrayList<Space>());
+		spaces.add(new ArrayList<Space>());
+		spaces.add(new ArrayList<Space>());
+		spaces.add(new ArrayList<Space>());
+		spaces.add(new ArrayList<Space>());
+	}
+
+	private void createPanels() {
+		normalPane = new JPanel();
+		normalPane.setLayout(new GridLayout(0, 1));
+		for (int i = 1; i <= 5; i++) {
+			JButton button = new JButton("Level " + i);
+			button.addMouseListener(new LevelListener(i));
+			buttons.add(button);
+			normalPane.add(button);
+		}
+
+		JPanel panel1 = new JPanel();
+		panel1.setLayout(new GridLayout(6, 6));
+		String[] rowtitles = new String[5];
+		String[] columntitles = new String[5];
+		for (int i = 0; i < 5; i++) {
+			String line = "";
+			if (readPlanLine(1, i) != null) {
+				line = readPlanLine(1, i);
+				rowtitles[i] = decideRowTitle(line);
+			}
+		}
+		for (int i = 0; i < 5; i++) {
+			String column = "";
+			if (readPlanColumn(1, i) != null) {
+				column = readPlanColumn(1, i);
+				columntitles[i] = decideRowTitle(column);
+			}
+		}
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 6; j++) {
+				if (i == 0) {
+					if (j == 0) {
+						JLabel label = new JLabel("");
+						label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+						panel1.add(label);
+					} else {
+						JLabel label = new JLabel(columntitles[j - 1]);
+						label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+						panel1.add(label);
+					}
+				} else if (j == 0) {
+					JLabel label = new JLabel(rowtitles[i - 1]);
+					label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+					panel1.add(label);
+				} else {
+					Space space = new Space(shouldSpaceBeFilled(1, i - 1, j - 1));
+					space.addMouseListener(new SpaceMouseListener(i - 1, j - 1));
+					space.setOpaque(true);
+					space.setBackground(Color.WHITE);
+					space.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+					spaces.get(0).add(space);
+					panel1.add(space);
+				}
+			}
+		}
+		panes.add(panel1);
+
+		JPanel panel2 = new JPanel();
+		panel2.setLayout(new GridLayout(11, 11));
+		String[] rowtitles2 = new String[10];
+		String[] columntitles2 = new String[10];
+		for (int i = 0; i < 10; i++) {
+			String line = "";
+			if (readPlanLine(2, i) != null) {
+				line = readPlanLine(2, i);
+				rowtitles2[i] = decideRowTitle(line);
+			}
+		}
+		for (int i = 0; i < 10; i++) {
+			String column = "";
+			if (readPlanColumn(2, i) != null) {
+				column = readPlanColumn(2, i);
+				columntitles2[i] = decideRowTitle(column);
+			}
+		}
+		for (int i = 0; i < 11; i++) {
+			for (int j = 0; j < 11; j++) {
+				if (i == 0) {
+					if (j == 0) {
+						JLabel label = new JLabel("");
+						label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+						panel2.add(label);
+					} else {
+						JLabel label = new JLabel(columntitles2[j - 1]);
+						label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+						panel2.add(label);
+					}
+				} else if (j == 0) {
+					JLabel label = new JLabel(rowtitles2[i - 1]);
+					label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+					panel2.add(label);
+				} else {
+					Space space = new Space(shouldSpaceBeFilled(2, i - 1, j - 1));
+					space.addMouseListener(new SpaceMouseListener(i - 1, j - 1));
+					space.setOpaque(true);
+					space.setBackground(Color.WHITE);
+					space.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+					spaces.get(1).add(space);
+					panel2.add(space);
+				}
+			}
+		}
+		panes.add(panel2);
+	}
+
+	private boolean shouldSpaceBeFilled(int level, int row, int column) {
+		BufferedReader br;
+		try {
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(
+					"/home/chris/PuzzleGames/PictureCross/assets/levelplans/level" + level + ".txt"));
+			br = new BufferedReader(reader);
+			for (int i = 0; i < row; i++) {
+				br.readLine();
+			}
+			String thisLine = br.readLine();
+			br.close();
+			if (thisLine.charAt(column) == 'x') {
+				return true;
+			}
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private void switchLevel(int num) {
+		System.out.println(num);
+		remove(normalPane);
+		setContentPane(panes.get(num - 1));
+		validate();
+		repaint();
+	}
+
+	private void backToMainMenu() {
+		System.out.println("mAIN");
+		remove(panes.get(currentLevel - 1));
+		setContentPane(normalPane);
+		validate();
+		repaint();
+		if (complete.isVisible()) {
+			complete.setVisible(false);
+		}
+	}
+
+	private void doACheck() {
+		if (game.check()) {
+			complete = new JDialog(this, "WELL DONE!", true);
+			JPanel buttonPanel = new JPanel(new FlowLayout());
+			JLabel label = new JLabel("Well Done! You completed this level");
+			buttonPanel.add(label);
+			JButton back = new JButton("Back");
+			back.addMouseListener(new BackListener());
+			buttonPanel.add(back);
+			complete.setContentPane(buttonPanel);
+			complete.pack();
+			complete.setLocationRelativeTo(this);
+			complete.setVisible(true);
+		}
+	}
+
+	private String decideRowTitle(String line) {
+		int total = 0;
+		String ret = "";
+		for (int i = 0; i < line.length(); i++) {
+			if (line.charAt(i) == 'x') {
+				total++;
+			} else {
+				if (total != 0) {
+					ret += total + " ";
+				}
+				total = 0;
+			}
+		}
+		if (total != 0) {
+			ret += total;
+		}
+		return ret;
+	}
+
+	private String readPlanLine(int level, int line) {
+		BufferedReader br;
+		try {
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(
+					"/home/chris/PuzzleGames/PictureCross/assets/levelplans/level" + level + ".txt"));
+			br = new BufferedReader(reader);
+			for (int i = 0; i < line; i++) {
+				br.readLine();
+			}
+			String thisLine = br.readLine();
+			br.close();
+			return thisLine;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private String readPlanColumn(int level, int column) {
+		BufferedReader br;
+		try {
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(
+					"/home/chris/PuzzleGames/PictureCross/assets/levelplans/level" + level + ".txt"));
+			br = new BufferedReader(reader);
+			ArrayList<String> lines = new ArrayList<String>();
+			String thisLine = null;
+			String thisColumn = "";
+			while ((thisLine = br.readLine()) != null) {
+				lines.add(thisLine);
+			}
+			for (int i = 0; i < lines.size(); i++) {
+				thisColumn += lines.get(i).charAt(column);
+			}
+			br.close();
+			return thisColumn;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ArrayList<Space> getSpaces() {
+		return this.spaces.get(currentLevel - 1);
+	}
+
+	public void colourSquareBlack(int column, int row) {
+		if (currentLevel == 1) {
+			spaces.get(currentLevel - 1).get(row * 5 + column).setBackground(Color.BLACK);
+			spaces.get(currentLevel - 1).get(row * 5 + column).setBlack(true);
+		} else if (currentLevel == 2) {
+			spaces.get(currentLevel - 1).get(row * 10 + column).setBackground(Color.BLACK);
+			spaces.get(currentLevel - 1).get(row * 10 + column).setBlack(true);
+		}
+	}
+
+	public void colourSquareWhite(int column, int row) {
+		if (currentLevel == 1) {
+			spaces.get(currentLevel - 1).get(row * 5 + column).setBackground(Color.WHITE);
+			spaces.get(currentLevel - 1).get(row * 5 + column).setBlack(false);
+		} else if (currentLevel == 2) {
+			spaces.get(currentLevel - 1).get(row * 10 + column).setBackground(Color.WHITE);
+			spaces.get(currentLevel - 1).get(row * 10 + column).setBlack(false);
+		}
+	}
+	public void colourSquareBlue(int column, int row) {
+		if (currentLevel == 1) {
+			spaces.get(currentLevel - 1).get(row * 5 + column).setBackground(Color.BLUE);
+			spaces.get(currentLevel - 1).get(row * 5 + column).setBlack(false);
+		} else if (currentLevel == 2) {
+			spaces.get(currentLevel - 1).get(row * 10 + column).setBackground(Color.BLUE);
+			spaces.get(currentLevel - 1).get(row * 10 + column).setBlack(false);
+		}
+	}
+
+	public class LevelListener extends MouseAdapter {
+
+		private int num;
+
+		public LevelListener(int num) {
+			this.num = num;
+		}
+
+		public void mousePressed(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				switchLevel(num);
+				currentLevel = num;
+			}
+		}
+
+	}
+
+	public class SpaceMouseListener extends MouseAdapter {
+
+		private int column, row;
+
+		public SpaceMouseListener(int row, int column) {
+			this.column = column;
+			this.row = row;
+		}
+
+		public void mousePressed(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				colourSquareBlack(column, row);
+				doACheck();
+			}
+			if (e.getButton() == MouseEvent.BUTTON) {
+				colourSquareBlue(column, row);
+				doACheck();
+			}
+			if (e.getButton() == MouseEvent.BUTTON3) {
+				colourSquareWhite(column, row);
+				doACheck();
+			}
+		}
+
+	}
+
+	public class BackListener extends MouseAdapter {
+
+		public BackListener() {
+		}
+
+		public void mousePressed(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				backToMainMenu();
+			}
+		}
+
+	}
+
+}

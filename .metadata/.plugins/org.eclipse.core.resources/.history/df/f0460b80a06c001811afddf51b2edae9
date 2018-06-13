@@ -1,0 +1,17 @@
+package com.liedssna.org.java.main.display;
+
+import javax.swing.JLabel;
+
+public class Space extends JLabel {
+	
+	private boolean shouldBe;
+	
+	public Space(boolean shouldBe) {
+		this.shouldBe = shouldBe;
+	}
+
+	public boolean isShouldBe() {
+		return shouldBe;
+	}
+
+}
