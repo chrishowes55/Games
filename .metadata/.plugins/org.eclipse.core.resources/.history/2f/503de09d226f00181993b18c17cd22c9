@@ -21,6 +21,7 @@ public class Game {
 	}
 	
 	public boolean checkColumn(int column, int size) {
+		System.out.println("CHECKED COL"));
 		for(int i = column; i < size * size; i += size) {
 			if (display.getSpaces().get(i).isShouldBe() != display.getSpaces().get(i).getBlack()) {
 				return false;
@@ -30,6 +31,7 @@ public class Game {
 	}
 	
 	public boolean checkRow(int row, int size) {
+		System.out.println("CHECKED ROW");
 		for(int i = row * size; i < (row + 1) * size; i++) {
 			if (display.getSpaces().get(i).isShouldBe() != display.getSpaces().get(i).getBlack()) {
 				return false;

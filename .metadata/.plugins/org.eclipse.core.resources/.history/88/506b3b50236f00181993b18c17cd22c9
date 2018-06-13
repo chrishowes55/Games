@@ -249,7 +249,7 @@ public class Display extends JFrame {
 		}
 		
 		if (game.checkColumn(column, size)) {
-			columnLabels.get(currentLevel - 1).get(column).setBackground(Color.GRAY);
+			columnLabels.get(column).setBackground(Color.GRAY);
 		}
 	}
 	
@@ -262,7 +262,7 @@ public class Display extends JFrame {
 		}
 		
 		if (game.checkRow(row, size)) {
-			rowLabels.get(currentLevel - 1).get(row).setBackground(Color.GRAY);
+			rowLabels.get(row).setBackground(Color.GRAY);
 		}
 	}
 

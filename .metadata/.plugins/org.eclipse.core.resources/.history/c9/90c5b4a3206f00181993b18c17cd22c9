@@ -20,17 +20,8 @@ public class Game {
 		return true;
 	}
 	
-	public boolean checkColumn(int column, int size) {
-		for(int i = column; i < size * size; i += size) {
-			if (display.getSpaces().get(i).isShouldBe() != display.getSpaces().get(i).getBlack()) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public boolean checkRow(int row, int size) {
-		for(int i = row * size; i < (row + 1) * size; i++) {
+	public boolean checkColumn(int size) {
+		for(int i = 0; i < size * size; i += size) {
 			if (display.getSpaces().get(i).isShouldBe() != display.getSpaces().get(i).getBlack()) {
 				return false;
 			}

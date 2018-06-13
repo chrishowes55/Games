@@ -27,8 +27,8 @@ public class Display extends JFrame {
 	private Game game;
 	private ArrayList<JButton> buttons = new ArrayList<JButton>();
 	private ArrayList<JPanel> panes = new ArrayList<JPanel>();
-	private ArrayList<ArrayList<JLabel>> columnLabels = new ArrayList<ArrayList<JLabel>>();
-	private ArrayList<ArrayList<JLabel>> rowLabels = new ArrayList<ArrayList<JLabel>>();
+	private ArrayList<JLabel> columnLabels = new ArrayList<JLabel>();
+	private ArrayList<JLabel> rowLabels = new ArrayList<JLabel>();
 	private ArrayList<ArrayList<Space>> spaces = new ArrayList<ArrayList<Space>>();
 	private int currentLevel = 0;
 
@@ -40,27 +40,9 @@ public class Display extends JFrame {
 		this.game = game;
 
 		popSpaces();
-		popColumnLabels();
-		popRowLabels();
 
 		createPanels();
 		setContentPane(normalPane);
-	}
-	
-	private void popColumnLabels() {
-		columnLabels.add(new ArrayList<JLabel>());
-		columnLabels.add(new ArrayList<JLabel>());
-		columnLabels.add(new ArrayList<JLabel>());
-		columnLabels.add(new ArrayList<JLabel>());
-		columnLabels.add(new ArrayList<JLabel>());
-	}
-	
-	private void popRowLabels() {
-		rowLabels.add(new ArrayList<JLabel>());
-		rowLabels.add(new ArrayList<JLabel>());
-		rowLabels.add(new ArrayList<JLabel>());
-		rowLabels.add(new ArrayList<JLabel>());
-		rowLabels.add(new ArrayList<JLabel>());
 	}
 
 	private void popSpaces() {
@@ -108,15 +90,11 @@ public class Display extends JFrame {
 						panel1.add(label);
 					} else {
 						JLabel label = new JLabel(columntitles[j - 1]);
-						label.setOpaque(true);
-						columnLabels.get(0).add(label);
 						label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 						panel1.add(label);
 					}
 				} else if (j == 0) {
 					JLabel label = new JLabel(rowtitles[i - 1]);
-					label.setOpaque(true);
-					rowLabels.get(0).add(label);
 					label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 					panel1.add(label);
 				} else {
@@ -159,15 +137,13 @@ public class Display extends JFrame {
 						panel2.add(label);
 					} else {
 						JLabel label = new JLabel(columntitles2[j - 1]);
-						label.setOpaque(true);
-						columnLabels.get(1).add(label);
+						columnLabels.add(label);
 						label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 						panel2.add(label);
 					}
 				} else if (j == 0) {
 					JLabel label = new JLabel(rowtitles2[i - 1]);
-					label.setOpaque(true);
-					rowLabels.get(1).add(label);
+					rowLabels.add(label);
 					label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 					panel2.add(label);
 				} else {
@@ -249,20 +225,7 @@ public class Display extends JFrame {
 		}
 		
 		if (game.checkColumn(column, size)) {
-			columnLabels.get(currentLevel - 1).get(column).setBackground(Color.GRAY);
-		}
-	}
-	
-	private void doARowCheck(int row) {
-		int size = 0;
-		if (currentLevel == 1) {
-			size = 5;
-		} else if (currentLevel == 2) {
-			size = 10;
-		}
-		
-		if (game.checkRow(row, size)) {
-			rowLabels.get(currentLevel - 1).get(row).setBackground(Color.GRAY);
+			
 		}
 	}
 
